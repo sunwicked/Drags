@@ -13,7 +13,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -56,21 +55,20 @@ public class MainActivity extends Activity {
 		public boolean onTouch(View view, MotionEvent motionEvent) {
 			if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 				ClipData data = ClipData.newPlainText("", "");
-				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+				DragShadowBuilder shadowBuilder = (DragShadowBuilder) new View.DragShadowBuilder(
 						view);
-				view.startDrag(data, shadowBuilder, view, 0);
+				view.startDrag(data, (android.view.View.DragShadowBuilder) shadowBuilder, view, 0);
 				view.setVisibility(View.INVISIBLE);
 				gobx = view;
 				return true;
 			}
-			if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+			/*if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
 				view.setVisibility(View.VISIBLE);
 				return true;
-			}
+			}*/
 			return false;
 		}
-		
-		
+
 	}
 
 	class MyDragListener implements OnDragListener {
@@ -90,6 +88,7 @@ public class MainActivity extends Activity {
 				break;
 			case DragEvent.ACTION_DRAG_EXITED:
 				// v.setBackgroundDrawable(normalShape);
+				
 				break;
 			case DragEvent.ACTION_DROP:
 				// Dropped, reassign View to ViewGroup
@@ -103,6 +102,8 @@ public class MainActivity extends Activity {
 				break;
 			case DragEvent.ACTION_DRAG_ENDED:
 				// v.setBackgroundDrawable(normalShape);
+				if(gobx.getParent()!=drpHere)
+				gobx.setVisibility(View.VISIBLE);
 			default:
 				break;
 			}
